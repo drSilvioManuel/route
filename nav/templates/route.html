@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block page %}
+    {% load replacer %}
+    <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action active">
+            For route: [{{ route.name|to_arrow }}] we have next paths:
+        </a>
+        {% for path in paths %}
+        <a href="#" class="list-group-item list-group-item-action">
+            {{ path.path_text|to_arrow }}
+        </a>
+        {% endfor %}
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <a href="/nav/" class="card-link">Back to main page</a>
+        </div>
+    </div>
+{% endblock %}

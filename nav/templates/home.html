@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block page %}
+<div class="card">
+    <div class="card-body">
+    <h5 class="card-title">Navigation system</h5>
+    <p class="card-text">
+        To start work you need to prepare info/file with routes.<br>
+        An example of such info you can download from link below (Download Example).
+    </p>
+    </div>
+</div>
+{% load replacer %}
+<form method="post" enctype="multipart/form-data" action="/nav/upload" class="form-horizontal">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <button type="submit" class="input-group-text" id="inputGroupFileAddon01">Upload Routes</button>
+          </div>
+        <div class="custom-file">
+            {{ field.errors }}
+            {{ field }}
+            <label class="custom-file-label" for="{{ field.id_for_label }}">File:</label>
+        </div>
+        <div class="input-group-append">
+            <a href="/static/Routes.csv" class="btn btn-outline-secondary" id="inputGroupFileAddon04">Download Example</a>
+          </div>
+    </div>
+    {% endfor %}
+</form>
+<div class="card">
+  <div class="card-body">
+      {% if routes %}
+        There are available routes, to see path click on wishful one.
+      {% else %}
+        There are not available routes, you need upload them
+      {% endif %}
+  </div>
+</div>
+<div class="list-group">
+    {% for route in routes %}
+    <a href="/nav/route/{{ route.id }}" class="list-group-item list-group-item-action">
+        {{ route.name|to_arrow }}
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}
