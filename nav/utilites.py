@@ -2,6 +2,13 @@ from nav.models import Path, Route, Street
 
 
 def handle_uploaded_file(csv_file):
+    """Process content from user file and insert/update data in the database
+
+    Args:
+    -----
+        csv_file:
+            uploaded by user CSV file, ';' separator has to be used
+    """
     file_data = csv_file.read().decode("utf-8")
     lines = file_data.split("\n")
     for i, line in enumerate(lines):
@@ -9,10 +16,9 @@ def handle_uploaded_file(csv_file):
             continue  # skip header
         line = line.strip()
         street_names = line.split(";")
-        if len(street_names) < 3:
+        if len(street_names) < 3:  # we need start, destination and at least one middle street
             continue
 
-        ids = []
         names = []
         start = None
         destination = None
@@ -26,9 +32,8 @@ def handle_uploaded_file(csv_file):
                 destination, _ = Street.objects.get_or_create(name=street_name)
             else:
                 street, _ = Street.objects.get_or_create(name=street_name)
-                ids.append(street.id)
                 names.append(street_name)
-        if destination is None or start is None or len(ids) == 0:
+        if destination is None or start is None or len(names) == 0:
             return
         route, _ = Route.objects.get_or_create(start=start,
                                                destination=destination,
